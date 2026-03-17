@@ -15,6 +15,6 @@ export interface GridEvent {
 	demand: number;
 }
 
-export interface ElevatorOpenNCloseDoors {
+export interface ElevatorEvent {
 	target: string;
 }

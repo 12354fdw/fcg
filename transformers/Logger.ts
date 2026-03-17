@@ -28,17 +28,22 @@ export default function transformer(program: ts.Program): ts.TransformerFactory<
 								? ts.factory.createIdentifier("warn")
 								: ts.factory.createIdentifier("print");
 
-						return ts.factory.createCallExpression(printFunc, undefined, [
-							ts.factory.createBinaryExpression(
-								ts.factory.createBinaryExpression(
-									ts.factory.createIdentifier("__LOG_CONTEXT"),
-									ts.SyntaxKind.PlusToken,
-									ts.factory.createStringLiteral(prefix),
-								),
-								ts.SyntaxKind.PlusToken,
-								node.arguments[0] ?? ts.factory.createStringLiteral(""),
-							),
-						]);
+						// First argument: __LOG_CONTEXT .. "prefix"
+						const firstArg = ts.factory.createBinaryExpression(
+							ts.factory.createIdentifier("__LOG_CONTEXT"),
+							ts.SyntaxKind.PlusToken,
+							ts.factory.createStringLiteral(prefix),
+						);
+
+						// Preserve all original arguments
+						const args: ts.Expression[] = [firstArg, ...node.arguments];
+
+						// If no original args, still pass empty string
+						if (node.arguments.length === 0) {
+							args.push(ts.factory.createStringLiteral(""));
+						}
+
+						return ts.factory.createCallExpression(printFunc, undefined, args);
 					}
 				}
 
