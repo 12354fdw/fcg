@@ -32,7 +32,6 @@ export class ShaftManager {
 	}
 
 	public requestFloor(from: ElevatorNode, to: ElevatorNode) {
-		$trace(from, to);
 		this.floorQueue.push({ from, to });
 		this.processQueue();
 	}
@@ -47,15 +46,12 @@ export class ShaftManager {
 		if (this.processing) return;
 		this.processing = true;
 
-		$trace("initializing processQueueThread");
-
 		while (!this.floorQueue.isEmpty()) {
 			await wait(0.01); // prevent a fatal bug
 
 			if (this.state !== "idle") break;
 
 			const request = this.floorQueue.pop();
-			$debug("request", request);
 			if (!request) break;
 
 			if (request.to === this.lastDeliveredFloor) continue;
@@ -63,8 +59,6 @@ export class ShaftManager {
 
 			await this.handleTeleport(request);
 		}
-
-		$trace("exiting");
 		this.processing = false;
 	}
 
@@ -159,7 +153,6 @@ export class ShaftManager {
 	//
 
 	private setState(newState: ElevatorState) {
-		$debug(`STATE: ${this.state} -> ${newState}`);
 		this.state = newState;
 	}
 
