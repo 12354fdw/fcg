@@ -6,7 +6,7 @@ import { TeleportVolume } from "./teleportVolume";
 import { copySound } from "shared/copySound";
 import { ServerStorage } from "@rbxts/services";
 import { ElevatorService } from "server/services/Elevator/elevatorService";
-import { ShaftManager } from "server/services/Elevator/shaftManager";
+import { ElevatorState, ShaftManager } from "server/services/Elevator/shaftManager";
 
 interface Sounds {
 	Moving: Sound;
@@ -36,14 +36,14 @@ export class ElevatorNode extends BaseComponent<{}, Model> implements OnStart {
 	public readonly teleportVolume: TeleportVolume;
 	public readonly Sounds: Sounds;
 
-	private shaftManager!: ShaftManager; // hopefully this won't cause a runtime error
-	private invalidateClose: boolean = false;
+	private shaftManager!: ShaftManager;
+
+	//
 
 	private getButton(name: string): ClickDetector {
 		const buttons = this.instance.WaitForChild("Buttons");
 		const button = buttons.WaitForChild(name);
-		const detector = button.WaitForChild("button").WaitForChild("ClickDetector") as ClickDetector;
-		return detector;
+		return button.WaitForChild("button").WaitForChild("ClickDetector") as ClickDetector;
 	}
 
 	public attachManager(manager: ShaftManager) {
@@ -51,32 +51,17 @@ export class ElevatorNode extends BaseComponent<{}, Model> implements OnStart {
 	}
 
 	private bindFloorButton(name: string) {
-		this.getButton(name).MouseClick.Connect((player: Player) => {
+		this.getButton(name).MouseClick.Connect(() => {
 			if (this.instance.Name === name) return;
-			this.shaftManager.requestFloor(this, this.shaftManager.findNodeByName(name)!);
+
+			const target = this.shaftManager.findNodeByName(name);
+			if (!target) return;
+
+			this.shaftManager.requestFloor(this, target);
 		});
 	}
 
-	public openNCloseDoors() {
-		if (this.shaftManager.isBusy) return;
-		this.shaftManager.isBusy = true;
-
-		this.Sounds.Ding.Play();
-
-		this.Sounds.Doors.Play();
-		this.elevatorDoor.open();
-
-		task.wait(10);
-		if (this.invalidateClose) {
-			this.invalidateClose = false;
-			return;
-		}
-
-		this.Sounds.Doors.Play();
-		this.elevatorDoor.close();
-
-		this.shaftManager.isBusy = false;
-	}
+	//
 
 	onStart(): void {
 		this.elevatorService.registerNode(this);
@@ -85,19 +70,15 @@ export class ElevatorNode extends BaseComponent<{}, Model> implements OnStart {
 		this.bindFloorButton("1");
 
 		this.getButton("call").MouseClick.Connect(() => {
-			this.openNCloseDoors();
+			this.shaftManager.requestDoorOpen(this);
 		});
+
 		this.getButton("open").MouseClick.Connect(() => {
-			this.openNCloseDoors();
+			this.shaftManager.requestDoorOpen(this);
 		});
 
 		this.getButton("close").MouseClick.Connect(() => {
-			this.invalidateClose = true;
-
-			this.shaftManager.isBusy = true;
-			this.Sounds.Doors.Play();
-			this.elevatorDoor.close();
-			this.shaftManager.isBusy = false;
+			this.shaftManager.requestDoorClose(this);
 		});
 	}
 }

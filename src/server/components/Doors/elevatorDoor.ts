@@ -1,6 +1,7 @@
 import { EventBus } from "server/services/eventBus";
 import { Door } from "./baseDoor";
 import { KeycardEvent } from "server/types/eventBusTypes";
+import { wait } from "shared/utils";
 
 interface ElevatorDoorConfiguration {
 	L1: BasePart;
@@ -35,7 +36,7 @@ export class ElevatorDoor extends Door<ElevatorDoorConfiguration> {
 		this.configuration = require(configModule) as ElevatorDoorConfiguration;
 	}
 
-	public open() {
+	public async open() {
 		if (this.busy) return;
 
 		const config = this.configuration;
@@ -47,13 +48,11 @@ export class ElevatorDoor extends Door<ElevatorDoorConfiguration> {
 
 		this.moveDoor(config.R1, config.R1Open, "opened", false);
 		this.moveDoor(config.R2, config.R2Open, "opened", false);
-		this.moveDoor(config.R3, config.R3Open, "opened", false);
-
-		task.wait(config.Time);
+		this.moveDoor(config.R3, config.R3Open, "opened");
 		this.busy = false;
 	}
 
-	public close() {
+	public async close() {
 		if (this.busy) return;
 
 		const config = this.configuration;
@@ -65,9 +64,7 @@ export class ElevatorDoor extends Door<ElevatorDoorConfiguration> {
 
 		this.moveDoor(config.R1, config.R1Close, "closed", false);
 		this.moveDoor(config.R2, config.R2Close, "closed", false);
-		this.moveDoor(config.R3, config.R3Close, "closed", false);
-
-		task.wait(config.Time);
+		this.moveDoor(config.R3, config.R3Close, "closed");
 		this.busy = false;
 	}
 }
