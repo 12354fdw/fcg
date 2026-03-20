@@ -1,8 +1,7 @@
-import { BaseComponent, Component } from "@flamework/components";
+import { Component } from "@flamework/components";
 import { EventBus } from "server/services/eventBus";
 import { Door } from "./baseDoor";
 import { KeycardEvent } from "server/types/eventBusTypes";
-import { tween } from "./tween";
 import { OnStart } from "@flamework/core";
 
 interface OneDoorKeycardConfiguration {

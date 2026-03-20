@@ -1,7 +1,5 @@
 import { EventBus } from "server/services/eventBus";
 import { Door } from "./baseDoor";
-import { KeycardEvent } from "server/types/eventBusTypes";
-import { wait } from "shared/utils";
 
 interface ElevatorDoorConfiguration {
 	L1: BasePart;

@@ -6,7 +6,7 @@ import { TeleportVolume } from "./teleportVolume";
 import { copySound } from "shared/copySound";
 import { ServerStorage } from "@rbxts/services";
 import { ElevatorService } from "server/services/Elevator/elevatorService";
-import { ElevatorState, ShaftManager } from "server/services/Elevator/shaftManager";
+import { ShaftManager } from "server/services/Elevator/shaftManager";
 
 interface Sounds {
 	Moving: Sound;
@@ -18,7 +18,7 @@ interface Sounds {
 	tag: "Elevator",
 })
 export class ElevatorNode extends BaseComponent<{}, Model> implements OnStart {
-	constructor(private eventBus: EventBus, private elevatorService: ElevatorService) {
+	constructor(eventBus: EventBus, private elevatorService: ElevatorService) {
 		super();
 
 		this.elevatorDoor = new ElevatorDoor(eventBus, this.instance);

@@ -83,8 +83,6 @@ export class ShaftManager {
 	//
 
 	private async startDoors(node: ElevatorNode) {
-		if (this.state !== "moving" && this.state !== "idle") return;
-
 		this.setState("doorsOpening");
 
 		this.doorSession++;
@@ -112,9 +110,7 @@ export class ShaftManager {
 	}
 
 	private async waitForDoors() {
-		if (this.doorPromise) {
-			await this.doorPromise;
-		}
+		await this.doorPromise;
 	}
 
 	//
@@ -154,9 +150,5 @@ export class ShaftManager {
 
 	private setState(newState: ElevatorState) {
 		this.state = newState;
-	}
-
-	public getState() {
-		return this.state;
 	}
 }
