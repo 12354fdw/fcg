@@ -4,7 +4,7 @@ import rankInformation, { KeycardLevel } from "server/types/keycardTypes";
 
 @Service({})
 export class KeycardGiver implements OnStart {
-	private keycardFactory(player: Player, rank: KeycardLevel) {
+	private createKeycardTool(player: Player, rank: KeycardLevel) {
 		const info = rankInformation[rank];
 
 		const template = ServerStorage.WaitForChild("KeycardTemplate").Clone() as Tool;
@@ -37,20 +37,24 @@ export class KeycardGiver implements OnStart {
 		picture.BorderColor3 = info.Color;
 	}
 
+	private grantKeycardToPlayer(player: Player) {
+		if (player.GetRoleInGroup(33499464) === "senior developer") {
+			this.createKeycardTool(player, "Development");
+		}
+
+		// TODO: give proper role
+		this.createKeycardTool(player, "Admin");
+		this.createKeycardTool(player, "Security");
+		this.createKeycardTool(player, "ReactorOperators");
+		this.createKeycardTool(player, "ComputerScientist");
+		this.createKeycardTool(player, "LnM");
+		this.createKeycardTool(player, "None");
+	}
+
 	onStart() {
 		Players.PlayerAdded.Connect((player: Player) => {
 			player.CharacterAdded.Connect(() => {
-				if (player.GetRoleInGroup(33499464) === "senior developer") {
-					this.keycardFactory(player, "Development");
-				}
-
-				// TODO: give proper role
-				this.keycardFactory(player, "Admin");
-				this.keycardFactory(player, "Security");
-				this.keycardFactory(player, "ReactorOperators");
-				this.keycardFactory(player, "ComputerScientist");
-				this.keycardFactory(player, "LnM");
-				this.keycardFactory(player, "None");
+				this.grantKeycardToPlayer(player);
 			});
 		});
 	}
