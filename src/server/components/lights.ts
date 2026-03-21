@@ -4,6 +4,7 @@ import { ServerStorage } from "@rbxts/services";
 import { EventBus } from "server/services/eventBus";
 import { GridEvent } from "server/types/eventBusTypes";
 import { copySound } from "shared/copySound";
+
 abstract class BaseLight extends BaseComponent<{}, Model> implements OnStart {
 	protected isOn = false;
 

@@ -1,6 +1,6 @@
 import { TweenService } from "@rbxts/services";
 
-export function tween(part: BasePart, target: BasePart, time: number, block = false) {
+export function tween(part: BasePart, target: BasePart, time: number, block: boolean = false) {
 	const promise = new Promise<Tween>((resolve) => {
 		const tweenInfo = new TweenInfo(time);
 

@@ -21,10 +21,10 @@ export class KeycardReader extends BaseComponent<{}, Model> implements OnStart {
 
 		const sounds = ServerStorage.WaitForChild("Sounds").WaitForChild("KeycardReader");
 
-		const soundSuccess = copySound(sounds.WaitForChild("success"), model);
-		const soundFailure = copySound(sounds.WaitForChild("failure"), model);
-
 		const hitbox = model.WaitForChild("hitbox") as BasePart;
+
+		const soundSuccess = copySound(sounds.WaitForChild("success"), hitbox);
+		const soundFailure = copySound(sounds.WaitForChild("failure"), hitbox);
 
 		hitbox.Touched.Connect((keycard: Instance): void => {
 			if (!CollectionService.HasTag(keycard, "Keycard")) return;

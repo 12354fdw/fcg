@@ -1,6 +1,6 @@
 import { ElevatorNode } from "server/components/Elevator/elevatorNode";
 import { TeleportVolume } from "server/components/Elevator/teleportVolume";
-import { Queue } from "server/types/queue";
+import { Queue } from "shared/types/queue";
 import { wait } from "shared/utils";
 
 type teleportRequest = {
