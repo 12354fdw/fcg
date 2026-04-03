@@ -3,7 +3,7 @@ import { EventBus } from "server/services/eventBus";
 import { ElevatorDoor } from "../Doors/elevatorDoor";
 import { OnStart } from "@flamework/core";
 import { TeleportVolume } from "./teleportVolume";
-import { copySound } from "shared/copySound";
+import { copyInstance } from "shared/copySound";
 import { ServerStorage } from "@rbxts/services";
 import { ElevatorService } from "server/services/Elevator/elevatorService";
 import { ShaftManager } from "server/services/Elevator/shaftManager";
@@ -26,9 +26,9 @@ export class ElevatorNode extends BaseComponent<{}, Model> implements OnStart {
 
 		const sounds = ServerStorage.WaitForChild("Sounds").WaitForChild("Elevator");
 		this.Sounds = {
-			Moving: copySound(sounds.WaitForChild("Moving"), this.instance.WaitForChild("floor")),
-			Ding: copySound(sounds.WaitForChild("Ding"), this.instance.WaitForChild("floor")),
-			Doors: copySound(sounds.WaitForChild("Doors"), this.instance.WaitForChild("floor")),
+			Moving: copyInstance(sounds.WaitForChild("Moving"), this.instance.WaitForChild("floor")),
+			Ding: copyInstance(sounds.WaitForChild("Ding"), this.instance.WaitForChild("floor")),
+			Doors: copyInstance(sounds.WaitForChild("Doors"), this.instance.WaitForChild("floor")),
 		};
 	}
 

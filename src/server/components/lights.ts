@@ -3,7 +3,7 @@ import { OnStart } from "@flamework/core";
 import { ServerStorage } from "@rbxts/services";
 import { EventBus } from "server/services/eventBus";
 import { GridEvent } from "server/types/eventBusTypes";
-import { copySound } from "shared/copySound";
+import { copyInstance } from "shared/copySound";
 
 abstract class BaseLight extends BaseComponent<{}, Model> implements OnStart {
 	protected isOn = false;
@@ -14,8 +14,8 @@ abstract class BaseLight extends BaseComponent<{}, Model> implements OnStart {
 
 	protected setupSounds() {
 		const sounds = ServerStorage.WaitForChild("Sounds").WaitForChild("Lights");
-		copySound(sounds.WaitForChild("trip"), this.instance);
-		copySound(sounds.WaitForChild("on"), this.instance);
+		copyInstance(sounds.WaitForChild("trip"), this.instance);
+		copyInstance(sounds.WaitForChild("on"), this.instance);
 	}
 
 	abstract onStart(): void;

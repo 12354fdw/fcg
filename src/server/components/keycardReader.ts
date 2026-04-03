@@ -3,7 +3,7 @@ import { OnStart } from "@flamework/core";
 import { Players, CollectionService, ServerStorage } from "@rbxts/services";
 import { EventBus } from "server/services/eventBus";
 import { KeycardLevel } from "server/types/keycardTypes";
-import { copySound } from "shared/copySound";
+import { copyInstance } from "shared/copySound";
 
 @Component({
 	tag: "KeycardReader",
@@ -23,8 +23,8 @@ export class KeycardReader extends BaseComponent<{}, Model> implements OnStart {
 
 		const hitbox = model.WaitForChild("hitbox") as BasePart;
 
-		const soundSuccess = copySound(sounds.WaitForChild("success"), hitbox);
-		const soundFailure = copySound(sounds.WaitForChild("failure"), hitbox);
+		const soundSuccess = copyInstance(sounds.WaitForChild("success"), hitbox);
+		const soundFailure = copyInstance(sounds.WaitForChild("failure"), hitbox);
 
 		hitbox.Touched.Connect((keycard: Instance): void => {
 			if (!CollectionService.HasTag(keycard, "Keycard")) return;
