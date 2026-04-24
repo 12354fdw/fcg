@@ -35,5 +35,7 @@
 				"obfuscation": false
 			}
 		]
-	}
+	},
+	"files": ["node_modules/@rbxts/types/include/roblox.d.ts"],
+	"include": ["src/**/*"]
 }
