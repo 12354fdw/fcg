@@ -1,7 +1,7 @@
 import { ElevatorNode } from "server/components/Elevator/elevatorNode";
 import { TeleportVolume } from "server/components/Elevator/teleportVolume";
 import { Queue } from "shared/types/queue";
-import { wait } from "shared/utils";
+import { uwait } from "shared/utils";
 
 type teleportRequest = {
 	from: ElevatorNode;
@@ -47,7 +47,7 @@ export class ShaftManager {
 		this.processing = true;
 
 		while (!this.floorQueue.isEmpty()) {
-			await wait(0.01); // prevent a fatal bug
+			await uwait(0.01); // prevent a fatal bug
 
 			if (this.state !== "idle") break;
 
@@ -68,13 +68,13 @@ export class ShaftManager {
 		this.setState("moving");
 
 		request.from.Sounds.Moving.Play();
-		await wait(3.71);
+		await uwait(3.71);
 
 		const target = request.to.instance.WaitForChild("TeleportationVolume") as Folder;
 		const snapshot = request.from.teleportVolume.capture();
 		TeleportVolume.teleport(target, snapshot);
 
-		await wait(0.2);
+		await uwait(0.2);
 
 		this.startDoors(request.to);
 		await this.waitForDoors();
